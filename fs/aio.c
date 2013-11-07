@@ -1161,6 +1161,7 @@ long do_io_submit(aio_context_t ctx_id, long nr,
 	struct blk_plug plug;
 #endif
 
+
 	if (unlikely(nr < 0))
 		return -EINVAL;
 
@@ -1179,6 +1180,7 @@ long do_io_submit(aio_context_t ctx_id, long nr,
 #ifndef CONFIG_AIO_SSD_ONLY
 	blk_start_plug(&plug);
 #endif
+
 
 	/*
 	 * AKPM: should this return a partial result if some of the IOs were
