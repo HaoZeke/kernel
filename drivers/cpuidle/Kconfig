@@ -38,6 +38,9 @@ config CPU_IDLE_GOV_NULL
 config ARCH_NEEDS_CPU_IDLE_COUPLED
 	def_bool n
 
+config DT_IDLE_STATES
+	bool
+
 if CPU_IDLE
 
 config CPU_IDLE_CALXEDA
