@@ -20,8 +20,11 @@
 
 static bool enable_si_ws = true;
 module_param(enable_si_ws, bool, 0644);
+<<<<<<< HEAD
 static bool enable_msm_hsic_ws = true;
 module_param(enable_msm_hsic_ws, bool, 0644);
+=======
+>>>>>>> 49f1fb7... power: skip sensor_ind wakeup source activation via sysfs
 
 #include "power.h"
 
@@ -443,6 +446,7 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 	if (WARN(wakeup_source_not_registered(ws),
 			"unregistered wakeup source\n"))
 		return;
+        }
 
 	if (!enable_si_ws && !strcmp(ws->name, "sensor_ind")) {
 		pr_info("wakeup source sensor_ind activate skipped\n");
