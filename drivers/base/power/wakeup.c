@@ -20,11 +20,8 @@
 
 static bool enable_si_ws = true;
 module_param(enable_si_ws, bool, 0644);
-<<<<<<< HEAD
 static bool enable_msm_hsic_ws = true;
 module_param(enable_msm_hsic_ws, bool, 0644);
-=======
->>>>>>> 49f1fb7... power: skip sensor_ind wakeup source activation via sysfs
 
 #include "power.h"
 
@@ -743,7 +740,7 @@ void pm_get_active_wakeup_sources(char *pending_wakeup_source, size_t max)
 
 	rcu_read_lock();
 	list_for_each_entry_rcu(ws, &wakeup_sources, entry) {
-		if (ws->active && len < max) {
+		if (ws->active) {
 			if (!active)
 				len += scnprintf(pending_wakeup_source, max,
 						"Pending Wakeup Sources: ");
