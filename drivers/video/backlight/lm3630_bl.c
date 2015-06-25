@@ -178,11 +178,11 @@ static int lm3630_bank_a_update_status(struct backlight_device *bl)
 
 #ifdef CONFIG_STATE_NOTIFIER
 	// if display is switched off
-	if (bl_level == 0)
+	if (!use_fb_notifier && bl_level == 0)
 		state_suspend();
 
 	// if display is switched on
-	if (bl_level != 0 && pre_brightness == 0)
+	if (!use_fb_notifier && bl_level != 0 && pre_brightness == 0)
 		state_resume();
 #endif
 
