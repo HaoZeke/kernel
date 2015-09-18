@@ -403,8 +403,6 @@ config MACH_SONY_SATSUKI_DSDS
 
 endmenu
 
-source arch/arm64/hotplug/Kconfig
-
 menu "Bus support"
 
 config ARM_AMBA
