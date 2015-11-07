@@ -187,7 +187,6 @@
  * variables which are referenced only from assembly code.  __visible tells the
  * optimizer that something else uses this function or variable, thus preventing
  * this.
- * Tell the optimizer that something else uses this function or variable.
  */
 #define __visible	__attribute__((externally_visible))
 #endif
