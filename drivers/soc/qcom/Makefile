@@ -92,3 +92,14 @@ obj-$(CONFIG_MSM_PACMAN)        += msm_pacman.o
 obj-$(CONFIG_MSM_TEST_PACMAN)        += msm_test_pacman.o
 obj-$(CONFIG_TRACER_PKT) += tracer_pkt.o
 obj-$(CONFIG_MSM_VSENS) += vsens.o
+
+obj-$(CONFIG_INTELLI_PLUG)	+= intelli_plug.o
+obj-$(CONFIG_MSM_SLEEPER) += msm_sleeper.o
+obj-$(CONFIG_MAKO_HOTPLUG) += mako_hotplug.o
+obj-$(CONFIG_ZEN_DECISION) += msm_zen_decision.o
+obj-$(CONFIG_ASMP)		+= autosmp.o
+obj-$(CONFIG_BRICKED_HOTPLUG) += bricked_hotplug.o
+obj-$(CONFIG_ALUCARD_HOTPLUG) += alucard_hotplug.o
+obj-$(CONFIG_STATE_NOTIFIER)		+= state_notifier.o
+obj-$(CONFIG_MSM_LIMITER) += msm_limiter.o
+obj-$(CONFIG_MSM_HOTPLUG) += msm_hotplug.o
