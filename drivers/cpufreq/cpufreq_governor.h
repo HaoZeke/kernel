@@ -128,9 +128,9 @@ static void *get_cpu_dbs_info_s(int cpu)				\
  * cs_*: Conservative governor
  * ex_*: ElementalX governor
  * zz_*: ZZMoove governor
- * ac_*: Alucard governor
  * dk_*: Darkness governor
  * nm_*: Nightmare governor
+ * ac_*: Alucard governor
  */
 
 /* Per cpu structures */
@@ -290,6 +290,22 @@ struct nm_dbs_tuners {
 	int freq_step;
 	int freq_step_dec;
 	int freq_step_dec_at_max_freq;
+};
+
+struct ac_dbs_tuners {
+	unsigned int ignore_nice_load;
+	unsigned int sampling_rate;
+	int inc_cpu_load_at_min_freq;
+	int inc_cpu_load;
+	int dec_cpu_load_at_min_freq;
+	int dec_cpu_load;
+	int freq_responsiveness;
+	unsigned int cpus_up_rate;
+	unsigned int cpus_down_rate;
+	int pump_inc_step;
+	int pump_inc_step_at_min_freq;
+	int pump_dec_step;
+	int pump_dec_step_at_min_freq;
 };
 
 /* Common Governor data across policies */

@@ -67,15 +67,15 @@ void dbs_check_cpu(struct dbs_data *dbs_data, int cpu)
 	} else if (dbs_data->cdata->governor == GOV_ZZMOOVE) {
 		sampling_rate = zz_tuners->sampling_rate;
 		ignore_nice = zz_tuners->ignore_nice_load;
-	} else if (dbs_data->cdata->governor == GOV_ALUCARD) {
-		sampling_rate = ac_tuners->sampling_rate;
-		ignore_nice = ac_tuners->ignore_nice_load;
 	} else if (dbs_data->cdata->governor == GOV_DARKNESS) {
 		sampling_rate = dk_tuners->sampling_rate;
 		ignore_nice = dk_tuners->ignore_nice_load;
 	} else if (dbs_data->cdata->governor == GOV_NIGHTMARE) {
 		sampling_rate = nm_tuners->sampling_rate;
 		ignore_nice = nm_tuners->ignore_nice_load;
+	} else if (dbs_data->cdata->governor == GOV_ALUCARD) {
+		sampling_rate = ac_tuners->sampling_rate;
+		ignore_nice = ac_tuners->ignore_nice_load;
 	} else {
 		sampling_rate = cs_tuners->sampling_rate;
 		ignore_nice = cs_tuners->ignore_nice_load;
@@ -274,10 +274,6 @@ static void set_sampling_rate(struct dbs_data *dbs_data,
 	} else if (dbs_data->cdata->governor == GOV_ZZMOOVE) {
 		struct zz_dbs_tuners *zz_tuners = dbs_data->tuners;
 		zz_tuners->sampling_rate = sampling_rate;
-	} else if (dbs_data->cdata->governor == GOV_ALUCARD) {
-		struct ac_dbs_tuners *ac_tuners = dbs_data->tuners;
-		ac_tuners->sampling_rate = max(ac_tuners->sampling_rate, 
-			sampling_rate);
 	} else if (dbs_data->cdata->governor == GOV_DARKNESS) {
 		struct dk_dbs_tuners *dk_tuners = dbs_data->tuners;
 		dk_tuners->sampling_rate = max(dk_tuners->sampling_rate, 
@@ -285,6 +281,10 @@ static void set_sampling_rate(struct dbs_data *dbs_data,
 	} else if (dbs_data->cdata->governor == GOV_NIGHTMARE) {
 		struct nm_dbs_tuners *nm_tuners = dbs_data->tuners;
 		nm_tuners->sampling_rate = max(nm_tuners->sampling_rate, 
+			sampling_rate);
+	} else if (dbs_data->cdata->governor == GOV_ALUCARD) {
+		struct ac_dbs_tuners *ac_tuners = dbs_data->tuners;
+		ac_tuners->sampling_rate = max(ac_tuners->sampling_rate,
 			sampling_rate);
 	} else {
 		struct od_dbs_tuners *od_tuners = dbs_data->tuners;
@@ -301,20 +301,21 @@ int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 	struct cs_cpu_dbs_info_s *cs_dbs_info = NULL;
 	struct ex_cpu_dbs_info_s *ex_dbs_info = NULL;
 	struct zz_cpu_dbs_info_s *zz_dbs_info = NULL;
-	struct ac_cpu_dbs_info_s *ac_dbs_info = NULL;
 	struct dk_cpu_dbs_info_s *dk_dbs_info = NULL;
 	struct nm_cpu_dbs_info_s *nm_dbs_info = NULL;
-	struct od_ops *od_ops = NULL;
-	struct ac_ops *ac_ops = NULL;
 	struct dk_ops *dk_ops = NULL;
 	struct nm_ops *nm_ops = NULL;
-	struct od_dbs_tuners *od_tuners = NULL;
-	struct cs_dbs_tuners *cs_tuners = NULL;
 	struct ex_dbs_tuners *ex_tuners = NULL;
 	struct zz_dbs_tuners *zz_tuners = NULL;
 	struct ac_dbs_tuners *ac_tuners = NULL;
 	struct dk_dbs_tuners *dk_tuners = NULL;
 	struct nm_dbs_tuners *nm_tuners = NULL;
+	struct ac_cpu_dbs_info_s *ac_dbs_info = NULL;
+	struct od_ops *od_ops = NULL;
+	struct ac_ops *ac_ops = NULL;
+	struct od_dbs_tuners *od_tuners = NULL;
+	struct cs_dbs_tuners *cs_tuners = NULL;
+	struct ac_dbs_tuners *ac_tuners = NULL;
 	struct cpu_dbs_common_info *cpu_cdbs;
 	unsigned int sampling_rate, latency, ignore_nice, j, cpu = policy->cpu;
 	int io_busy = 0;
