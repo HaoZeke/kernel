@@ -344,6 +344,11 @@ config CPU_FREQ_GOV_DARKNESS
 	select CPU_FREQ_GOV_COMMON
 
 
+config CPUFREQ_LIMITER
+	bool "Cpufreq Limter job"
+	default n
+	depends on CPU_FREQ
+
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"
 	depends on CPU_FREQ
