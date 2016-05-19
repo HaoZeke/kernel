@@ -1141,4 +1141,13 @@ config TOUCHSCREEN_ELAN_EKTF3135
 source "drivers/input/touchscreen/cyttsp4/Kconfig"
 source "drivers/input/touchscreen/cyttsp5/Kconfig"
 
+config ALUCARD_TOUCHSCREEN_BOOST
+	tristate "Touchscreen boost"
+	depends on CPUFREQ_LIMITER
+	default n
+	help
+	  Alucard touchscreen boost.
+
+source "drivers/input/touchscreen/gt9xx/Kconfig"
+
 endif
