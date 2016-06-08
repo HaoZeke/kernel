@@ -740,6 +740,10 @@ config ALUCARD_HOTPLUG
  	help
 	Generic Alucard-hotplug cpu hotplug driver for ARM SOCs
 
+config THUNDERPLUG_CONTROL
+	bool "Enable plugging down/up of cores based on load per core"
+	help
+	  This driver hotplugs cpu cores based on per-core load
 
 source "drivers/soc/qcom/memshare/Kconfig"
 
