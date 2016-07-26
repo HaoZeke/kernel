@@ -4226,7 +4226,7 @@ CONFIG_STRICT_MEMORY_RWX=y
 ###########################
 # Personal (Don't delete) #
 ###########################
-CONFIG_LOCALVERSION="-Dual_r2"
+CONFIG_LOCALVERSION="-Dual_r2.99b"
 CONFIG_SDCARD_FS=y
 
 CONFIG_CPU_FREQ_GOV_IMPULSE=y
