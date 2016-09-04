@@ -725,12 +725,15 @@ config STATE_NOTIFIER
         bool "State Notifier"
 	default y
 
+
 config MSM_HOTPLUG
 	bool "MSM hotplug driver"
 	depends on HOTPLUG_CPU
 	default n
 	help
-          Enable support for Voltage Sensing Block available on certain MSM
+	  The MSM hotplug driver controls on-/offlining of additional cores based
+	  on current cpu load.
+      Enable support for Voltage Sensing Block available on certain MSM
 	  chipsets. Voltage Sensing Block monitors the voltage at certain points
 	  in the chip and makes recent readings available via FIFO registers.
 	  It can also be configured to trigger an interrupt when a min or max threshold is
@@ -745,6 +748,7 @@ config ALUCARD_HOTPLUG
  	default y
  	help
 	Generic Alucard-hotplug cpu hotplug driver for ARM SOCs
+
 
 source "drivers/soc/qcom/memshare/Kconfig"
 
