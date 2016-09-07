@@ -171,8 +171,20 @@ set_intensity(struct backlight_device *bl, struct lm3630_chip_data *pchip)
 static int lm3630_bank_a_update_status(struct backlight_device *bl)
 {
 	int ret;
-	struct lm3630_chip_data *pchip = bl_get_data(bl);
+//	struct lm3630_chip_data *pchip = bl_get_data(bl);
 	enum lm3630_pwm_ctrl pwm_ctrl = pchip->pdata->pwm_ctrl;
+	struct lm3630_chip_data *pchip = lm3630_pchip;
+	pr_debug("%s: bl=%d\n", __func__,bl_level);
+
+#ifdef CONFIG_STATE_NOTIFIER
+	// if display is switched off
+	if (bl_level == 0)
+		state_suspend();
+
+	// if display is switched on
+	if (bl_level != 0 && pre_brightness == 0)
+		state_resume();
+#endif
 
 	/* brightness 0 means disable */
 	if (!bl->props.brightness) {
