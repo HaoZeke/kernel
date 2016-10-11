@@ -414,6 +414,67 @@ static void kgsl_mem_entry_commit_process(struct kgsl_process_private *process,
 }
 
 /**
+ * kgsl_mem_entry_untrack_gpuaddr() - Untrack memory that is previously tracked
+ * process - Pointer to process private to which memory belongs
+ * entry - Memory entry to untrack
+ *
+ * Function just does the opposite of kgsl_mem_entry_track_gpuaddr. Needs to be
+ * called with processes spin lock held
+ */
+static void
+kgsl_mem_entry_untrack_gpuaddr(struct kgsl_process_private *process,
+				struct kgsl_mem_entry *entry)
+{
+	assert_spin_locked(&process->mem_lock);
+	if (entry->memdesc.gpuaddr) {
+		kgsl_mmu_put_gpuaddr(entry->memdesc.pagetable,
+					&entry->memdesc);
+		rb_erase(&entry->node, &entry->priv->mem_rb);
+	}
+}
+
+static void kgsl_mem_entry_commit_mem_list(struct kgsl_process_private *process,
+				struct kgsl_mem_entry *entry)
+{
+	struct rb_node **node;
+	struct rb_node *parent = NULL;
+
+	if (!entry->memdesc.gpuaddr)
+		return;
+
+	/* Insert mem entry in mem_rb tree */
+	node = &process->mem_rb.rb_node;
+	while (*node) {
+		struct kgsl_mem_entry *cur;
+
+		parent = *node;
+		cur = rb_entry(parent, struct kgsl_mem_entry, node);
+
+		if (entry->memdesc.gpuaddr < cur->memdesc.gpuaddr)
+			node = &parent->rb_left;
+		else
+			node = &parent->rb_right;
+	}
+
+	rb_link_node(&entry->node, parent, node);
+	rb_insert_color(&entry->node, &process->mem_rb);
+}
+
+static void kgsl_mem_entry_commit_process(struct kgsl_process_private *process,
+				struct kgsl_mem_entry *entry)
+{
+	if (!entry)
+		return;
+
+	spin_lock(&entry->priv->mem_lock);
+	/* Insert mem entry in mem_rb tree */
+	kgsl_mem_entry_commit_mem_list(process, entry);
+	/* Replace mem entry in mem_idr using id */
+	idr_replace(&entry->priv->mem_idr, entry, entry->id);
+	spin_unlock(&entry->priv->mem_lock);
+}
+
+/**
  * kgsl_mem_entry_attach_process - Attach a mem_entry to its owner process
  * @entry: the memory entry
  * @process: the owner process
@@ -3108,6 +3169,12 @@ long kgsl_ioctl_gpuobj_alloc(struct kgsl_device_private *dev_priv,
 	param->id = entry->id;
 
 	return 0;
+	kgsl_mem_entry_commit_process(private, entry);
+	return result;
+err:
+	kgsl_sharedmem_free(&entry->memdesc);
+	kfree(entry);
+	return result;
 }
 
 long kgsl_ioctl_gpumem_alloc(struct kgsl_device_private *dev_priv,
@@ -3147,13 +3214,25 @@ long kgsl_ioctl_gpumem_alloc_id(struct kgsl_device_private *dev_priv,
 		return PTR_ERR(entry);
 
 	param->id = entry->id;
-	param->flags = (unsigned int) entry->memdesc.flags;
+/*	param->flags = (unsigned int) entry->memdesc.flags;
 	param->size = (size_t) entry->memdesc.size;
 	param->mmapsize = (size_t)
 		kgsl_memdesc_mmapsize(&entry->memdesc);
 	param->gpuaddr = (unsigned long) entry->memdesc.gpuaddr;
 
 	return 0;
+*/
+	param->flags = entry->memdesc.flags;
+	param->size = entry->memdesc.size;
+	param->mmapsize = kgsl_memdesc_mmapsize(&entry->memdesc);
+	param->gpuaddr = entry->memdesc.gpuaddr;
+	kgsl_mem_entry_commit_process(private, entry);
+	return result;
+err:
+	if (entry)
+		kgsl_sharedmem_free(&entry->memdesc);
+	kfree(entry);
+	return result;
 }
 
 long kgsl_ioctl_gpumem_get_info(struct kgsl_device_private *dev_priv,
