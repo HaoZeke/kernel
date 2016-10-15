@@ -213,9 +213,42 @@ static void bcl_handle_hotplug(struct work_struct *work)
 {
 	int ret = 0, cpu = 0;
 	union device_request curr_req;
+	return 0;
+}
+
+static int bcl_battery_set_property(struct power_supply *psy,
+				enum power_supply_property prop,
+				const union power_supply_propval *val)
+{
+	return 0;
+}
+
+static void power_supply_callback(struct power_supply *psy)
+{
+	int vbatt = 0;
+	if (bcl_hit_shutdown_voltage)
+		return;
+	if (0 != bcl_get_battery_voltage(&vbatt))
+		return;
+	if (vbatt <= gbcl->btm_vph_low_thresh) {
+		/*relay the notification to smb135x driver*/
+		bcl_config_vph_adc(gbcl, BCL_LOW_THRESHOLD_TYPE_MIN);
+	} else if ((vbatt  > gbcl->btm_vph_low_thresh) &&
+		(vbatt <= gbcl->btm_vph_high_thresh))
+		bcl_config_vph_adc(gbcl, BCL_LOW_THRESHOLD_TYPE);
+	else
+		bcl_config_vph_adc(gbcl, BCL_HIGH_THRESHOLD_TYPE);
+}
+
+static void __ref bcl_handle_hotplug(void)
+{
+	int ret = 0, _cpu = 0;
 
 	trace_bcl_sw_mitigation_event("start hotplug mitigation");
 	mutex_lock(&bcl_hotplug_mutex);
+
+	if (cpumask_empty(bcl_cpu_online_mask))
+		bcl_update_online_mask();
 
 #ifdef CONFIG_MSM_BCL_SOMC_CTL
 	if ((bcl_soc_state == BCL_LOW_THRESHOLD
@@ -245,9 +278,32 @@ static void bcl_handle_hotplug(struct work_struct *work)
 	if (ret) {
 		pr_err("hotplug request failed. err:%d\n", ret);
 		goto handle_hotplug_exit;
+	for_each_possible_cpu(_cpu) {
+		if (!(bcl_hotplug_mask & BIT(_cpu))
+			|| !(cpumask_test_cpu(_cpu, bcl_cpu_online_mask)))
+			continue;
+
+		if (bcl_hotplug_request & BIT(_cpu)) {
+			if (!cpu_online(_cpu))
+				continue;
+			ret = cpu_down(_cpu);
+			if (ret)
+				pr_err("Error %d offlining core %d\n",
+					ret, _cpu);
+			else
+				pr_info("Set Offline CPU:%d\n", _cpu);
+		} else {
+			if (cpu_online(_cpu))
+				continue;
+			ret = cpu_up(_cpu);
+			if (ret)
+				pr_err("Error %d onlining core %d\n",
+					ret, _cpu);
+			else
+				pr_info("Allow Online CPU:%d\n", _cpu);
+		}
 	}
 
-handle_hotplug_exit:
 	mutex_unlock(&bcl_hotplug_mutex);
 	trace_bcl_sw_mitigation_event("stop hotplug mitigation");
 	return;
