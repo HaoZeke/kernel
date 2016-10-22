@@ -2316,6 +2316,13 @@ static void _print_recovery(struct kgsl_device *device,
 
 static void cmdbatch_profile_ticks(struct adreno_device *adreno_dev,
 	struct kgsl_cmdbatch *cmdbatch, uint64_t *start, uint64_t *retire)
+/**
+ * adreno_dispatcher_work() - Master work handler for the dispatcher
+ * @work: Pointer to the work struct for the current work queue
+ *
+ * Process expired commands and send new ones.
+ */
+static void adreno_dispatcher_work(struct kthread_work *work)
 {
 	void *ptr = adreno_dev->cmdbatch_profile_buffer.hostptr;
 	struct adreno_cmdbatch_profile_entry *entry;
@@ -2564,7 +2571,7 @@ void adreno_dispatcher_schedule(struct kgsl_device *device)
 	struct adreno_device *adreno_dev = ADRENO_DEVICE(device);
 	struct adreno_dispatcher *dispatcher = &adreno_dev->dispatcher;
 
-	queue_work(device->work_queue, &dispatcher->work);
+	queue_kthread_work(&kgsl_driver.worker, &dispatcher->work);
 }
 
 /**
@@ -2847,10 +2854,14 @@ int adreno_dispatcher_init(struct adreno_device *adreno_dev)
 	setup_timer(&dispatcher->fault_timer, adreno_dispatcher_fault_timer,
 		(unsigned long) adreno_dev);
 
+<<<<<<< HEAD
 	setup_timer(&dispatcher->preempt_timer, adreno_dispatcher_preempt_timer,
 		(unsigned long) adreno_dev);
 
 	INIT_WORK(&dispatcher->work, adreno_dispatcher_work);
+=======
+	init_kthread_work(&dispatcher->work, adreno_dispatcher_work);
+>>>>>>> 2320cb3... kgsl: convert some workqueues to use kthreads
 
 	init_completion(&dispatcher->idle_gate);
 	complete_all(&dispatcher->idle_gate);
