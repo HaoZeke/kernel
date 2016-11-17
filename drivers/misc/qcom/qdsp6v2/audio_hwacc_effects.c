@@ -251,7 +251,8 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 
 		bufptr = q6asm_is_cpu_buf_avail(IN, effects->ac, &size, &idx);
 		if (bufptr) {
-			if (copy_from_user(bufptr, (void *)arg,
+				if ((effects->config.buf_cfg.output_len > size) ||
+				copy_from_user(bufptr, (void *)arg,
 					effects->config.buf_cfg.output_len)) {
 				rc = -EFAULT;
 				goto ioctl_fail;
@@ -307,7 +308,8 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 				rc = -EFAULT;
 				goto ioctl_fail;
 			}
-			if (copy_to_user((void *)arg, bufptr,
+				if ((effects->config.buf_cfg.input_len > size) ||
+				copy_to_user((void *)arg, bufptr,
 					  effects->config.buf_cfg.input_len)) {
 				rc = -EFAULT;
 				goto ioctl_fail;

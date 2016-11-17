@@ -989,6 +989,7 @@ static long msm_isp_ioctl_unlocked(struct v4l2_subdev *sd,
 	unsigned int cmd, void *arg)
 {
 	long rc = 0;
+	long rc2 = 0;
 	struct vfe_device *vfe_dev = v4l2_get_subdevdata(sd);
 
 	if (!vfe_dev || !vfe_dev->vfe_base) {
@@ -1059,7 +1060,10 @@ static long msm_isp_ioctl_unlocked(struct v4l2_subdev *sd,
 		if (atomic_read(&vfe_dev->error_info.overflow_state)
 			!= HALT_ENFORCED) {
 			rc = msm_isp_stats_reset(vfe_dev);
-			rc |= msm_isp_axi_reset(vfe_dev, arg);
+/*			rc |= msm_isp_axi_reset(vfe_dev, arg); */
+			rc2 = msm_isp_axi_reset(vfe_dev, arg);
+		if (!rc && rc2)
+			rc = rc2;
 		} else {
 				pr_err_ratelimited("Halt Enforced");
 		}
@@ -1070,7 +1074,10 @@ static long msm_isp_ioctl_unlocked(struct v4l2_subdev *sd,
 			!= HALT_ENFORCED) {
 			mutex_lock(&vfe_dev->core_mutex);
 			rc = msm_isp_stats_restart(vfe_dev);
-			rc |= msm_isp_axi_restart(vfe_dev, arg);
+/*			rc |= msm_isp_axi_restart(vfe_dev, arg); */
+			rc2 = msm_isp_axi_restart(vfe_dev, arg);
+		if (!rc && rc2)
+			rc = rc2;
 		} else {
 				pr_err_ratelimited("Halt Enforced");
 		}
@@ -1884,6 +1891,7 @@ void msm_isp_process_iommu_page_fault(struct vfe_device *vfe_dev)
 	pr_err_ratelimited("%s:%d] vfe_dev %p id %d\n", __func__,
 		__LINE__, vfe_dev, vfe_dev->pdev->id);
 
+	memset(&error_event, 0, sizeof(error_event));
 	error_event.frame_id =
 		vfe_dev->axi_data.src_info[VFE_PIX_0].frame_id;
 	vfe_dev->buf_mgr->ops->buf_mgr_debug(vfe_dev->buf_mgr);
