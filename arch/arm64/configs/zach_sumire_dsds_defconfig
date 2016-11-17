@@ -4214,5 +4214,8 @@ CONFIG_QMI_ENCDEC=y
 CONFIG_STRICT_MEMORY_RWX=y
 # CONFIG_THUNDERPLUG_CONTROL is not set
 
-
-CONFIG_LOCALVERSION="-Dual_r1"
+###########################
+# Personal (Don't delete) #
+###########################
+CONFIG_LOCALVERSION="-Dual_r2"
+CONFIG_SDCARD_FS=y

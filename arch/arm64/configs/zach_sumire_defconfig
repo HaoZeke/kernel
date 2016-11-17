@@ -4177,7 +4177,6 @@ CONFIG_TOUCHSCREEN_CLEARPAD_RMI_DEV=y
 #### SunKernel ####
 ##########################
 
-CONFIG_LOCALVERSION="-305_corona_III.1_9_12_5_2_ctl_X"
 CONFIG_LOCALVERSION_AUTO=n
 
 CONFIG_JOYSTICK_XPAD=y
@@ -4828,3 +4827,8 @@ CONFIG_BT_PROTOCOL_DRIVER=y
 CONFIG_LINE_DISCIPLINE_DRIVER=y
 ### CONFIG_V4L2_ANT_DRIVER=y
 ### CONFIG_V4L2_FM_DRIVER=y
+###########################
+# Personal (Don't delete) #
+###########################
+CONFIG_LOCALVERSION="-Single_r2"
+CONFIG_SDCARD_FS=y
