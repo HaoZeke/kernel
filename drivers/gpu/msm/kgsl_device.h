@@ -208,53 +208,6 @@ struct kgsl_memobj_node {
 	uint64_t gpuaddr;
 	uint64_t size;
 	unsigned long flags;
-	unsigned int created;
-	struct kthread_work work;
-	int result;
-};
-
-/**
- * struct event_group - A list of GPU events
- * @context: Pointer to the active context for the events
- * @lock: Spinlock for protecting the list
- * @events: List of active GPU events
- * @group: Node for the master group list
- * @processed: Last processed timestamp
- */
-struct kgsl_event_group {
-	struct kgsl_context *context;
-	spinlock_t lock;
-	struct list_head events;
-	struct list_head group;
-	unsigned int processed;
-};
-
-/**
- * struct kgsl_cmdbatch - KGSl command descriptor
- * @device: KGSL GPU device that the command was created for
- * @context: KGSL context that created the command
- * @timestamp: Timestamp assigned to the command
- * @flags: flags
- * @priv: Internal flags
- * @fault_policy: Internal policy describing how to handle this command in case
- * of a fault
- * @fault_recovery: recovery actions actually tried for this batch
- * @ibcount: Number of IBs in the command list
- * @ibdesc: Pointer to the list of IBs
- * @expires: Point in time when the cmdbatch is considered to be hung
- * @refcount: kref structure to maintain the reference count
- * @synclist: List of context/timestamp tuples to wait for before issuing
- * @timer: a timer used to track possible sync timeouts for this cmdbatch
- *
- * This struture defines an atomic batch of command buffers issued from
- * userspace.
- */
-struct kgsl_cmdbatch {
-	struct kgsl_device *device;
-	struct kgsl_context *context;
-	spinlock_t lock;
-	uint32_t timestamp;
-	uint32_t flags;
 	unsigned long priv;
 };
 

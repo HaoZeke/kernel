@@ -168,53 +168,6 @@ enum adreno_start_type {
 #define ADRENO_SPTP_PC_CTRL 0
 #define ADRENO_PPD_CTRL     1
 #define ADRENO_LM_CTRL      2
-/*
- * Maximum size of the dispatcher ringbuffer - the actual inflight size will be
- * smaller then this but this size will allow for a larger range of inflight
- * sizes that can be chosen at runtime
- */
-
-#define ADRENO_DISPATCH_CMDQUEUE_SIZE 128
-
-/**
- * struct adreno_dispatcher - container for the adreno GPU dispatcher
- * @mutex: Mutex to protect the structure
- * @state: Current state of the dispatcher (active or paused)
- * @timer: Timer to monitor the progress of the command batches
- * @inflight: Number of command batch operations pending in the ringbuffer
- * @fault: Non-zero if a fault was detected.
- * @pending: Priority list of contexts waiting to submit command batches
- * @plist_lock: Spin lock to protect the pending queue
- * @cmdqueue: Queue of command batches currently flight
- * @head: pointer to the head of of the cmdqueue.  This is the oldest pending
- * operation
- * @tail: pointer to the tail of the cmdqueue.  This is the most recently
- * submitted operation
- * @work: work_struct to put the dispatcher in a work queue
- * @kobj: kobject for the dispatcher directory in the device sysfs node
- * @idle_gate: Gate to wait on for dispatcher to idle
- */
-struct adreno_dispatcher {
-	struct mutex mutex;
-	unsigned long priv;
-	struct timer_list timer;
-	struct timer_list fault_timer;
-	unsigned int inflight;
-	atomic_t fault;
-	struct plist_head pending;
-	spinlock_t plist_lock;
-	struct kgsl_cmdbatch *cmdqueue[ADRENO_DISPATCH_CMDQUEUE_SIZE];
-	unsigned int head;
-	unsigned int tail;
-	struct kthread_work work;
-	struct kobject kobj;
-	struct completion idle_gate;
-};
-
-enum adreno_dispatcher_flags {
-	ADRENO_DISPATCHER_POWER = 0,
-	ADRENO_DISPATCHER_ACTIVE = 1,
-};
 
 struct adreno_gpudev;
 
