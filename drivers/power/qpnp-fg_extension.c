@@ -161,13 +161,9 @@ static void somc_fg_set_aging_mode(struct fg_chip *chip, int64_t learned_cc_uah,
 	struct fg_somc_params *params = &chip->somc_params;
 	int rc;
 
-/*	if (params->aging_data.batt_aging ||
+	if (params->aging_data.batt_aging ||
 	    somc_fg_aging_mode_check(params, learned_cc_uah, nom_cap_uah)) {
 		if (params->aging_data.aging_mode)
-*/
-	if (params->batt_aging ||
-	    somc_fg_aging_mode_check(params, learned_cc_uah, nom_cap_uah)) {
-		if (params->aging_mode)
 			return;
 		pr_fg_ext(PR_INFO, "start aging mode\n");
 		rc = somc_fg_aging_setting(chip, RESUME_SOC_AGING_VAL, true);

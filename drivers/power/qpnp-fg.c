@@ -2812,8 +2812,7 @@ static int fg_power_get_property(struct power_supply *psy,
 		break;
 #ifdef CONFIG_QPNP_FG_EXTENSION
 	case POWER_SUPPLY_PROP_BATT_AGING:
-/*		val->intval = chip->somc_params.aging_data.batt_aging; */
-		val->intval = chip->somc_params.batt_aging;
+		val->intval = chip->somc_params.aging_data.batt_aging;
 		break;
 #endif
 	default:
@@ -3836,28 +3835,6 @@ static int fg_power_set_property(struct power_supply *psy,
 		}
 		break;
 #endif
-#ifdef CONFIG_QPNP_FG_EXTENSION
-	case POWER_SUPPLY_PROP_CHARGE_FULL:
-		if (0 < val->intval && val->intval <= chip->nom_cap_uah) {
-			chip->learning_data.learned_cc_uah = val->intval;
-			fg_cap_learning_save_data(chip);
-			somc_fg_set_aging_mode(&chip->somc_params, chip->dev,
-					chip->learning_data.learned_cc_uah,
-					chip->nom_cap_uah,
-					settings[FG_MEM_RESUME_SOC].value);
-			schedule_work(&chip->status_change_work);
-		}
-		break;
-	case POWER_SUPPLY_PROP_BATT_AGING:
-		if (val->intval) {
-			chip->somc_params.batt_aging = true;
-			somc_fg_set_aging_mode(&chip->somc_params, chip->dev,
-					chip->learning_data.learned_cc_uah,
-					chip->nom_cap_uah,
-					settings[FG_MEM_RESUME_SOC].value);
-		}
-		break;
-#endif
 	default:
 		return -EINVAL;
 	};
@@ -3872,10 +3849,6 @@ static int fg_property_is_writeable(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_COOL_TEMP:
 	case POWER_SUPPLY_PROP_WARM_TEMP:
 	case POWER_SUPPLY_PROP_CYCLE_COUNT_ID:
-#ifdef CONFIG_QPNP_FG_EXTENSION
-	case POWER_SUPPLY_PROP_CHARGE_FULL:
-	case POWER_SUPPLY_PROP_BATT_AGING:
-#endif
 #ifdef CONFIG_QPNP_FG_EXTENSION
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 	case POWER_SUPPLY_PROP_BATT_AGING:

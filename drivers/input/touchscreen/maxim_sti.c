@@ -16,9 +16,11 @@
  *
  */
 /*
- * NOTE: This file has been modified by Sony Mobile Communications Inc.
- * Modifications are Copyright (c) 2014 Sony Mobile Communications Inc,
- * and licensed under the license of the file.
+ * Copyright (C) 2014 Sony Mobile Communications Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2, as
+ * published by the Free Software Foundation.
  */
 
 #include <linux/module.h>
