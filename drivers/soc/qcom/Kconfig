@@ -672,7 +672,7 @@ config QCOM_NPA_DUMP
 config BRICKED_HOTPLUG
 	   bool "Enable kernel based mpdecision"
 	   depends on MSM_RUN_QUEUE_STATS
-	   default y
+	   default n
 	   help
 		 This enables kernel based multi core control.
       
@@ -706,9 +706,10 @@ config TRACER_PKT
 
 config MSM_VSENS
 	bool "Voltage Sensor Monitoring"
+
 config MSM_SLEEPER
     bool "CPU hotplug driver"
- 	default y
+ 	default n
  	help
 	  CPU hotplug driver
 
@@ -727,7 +728,7 @@ config STATE_NOTIFIER
 config MSM_HOTPLUG
 	bool "MSM hotplug driver"
 	depends on HOTPLUG_CPU
-	default y
+	default n
 	help
           Enable support for Voltage Sensing Block available on certain MSM
 	  chipsets. Voltage Sensing Block monitors the voltage at certain points
@@ -741,7 +742,7 @@ config MSM_HOTPLUG
 	  
 config ALUCARD_HOTPLUG
 	bool "Enable alucard-hotplug cpu hotplug driver"
- 	default n
+ 	default y
  	help
 	Generic Alucard-hotplug cpu hotplug driver for ARM SOCs
 
