@@ -4824,7 +4824,7 @@ CONFIG_LINE_DISCIPLINE_DRIVER=y
 ###########################
 # Personal (Don't delete) #
 ###########################
-CONFIG_LOCALVERSION="-Single_r2.99b1c"
+CONFIG_LOCALVERSION="-Single_r3"
 #CONFIG_SDCARD_FS=y
 
 CONFIG_CPU_FREQ_GOV_IMPULSE=y
