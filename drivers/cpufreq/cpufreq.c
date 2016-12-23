@@ -30,7 +30,6 @@
 #include <linux/tick.h>
 #include <trace/events/power.h>
 
-<<<<<<< HEAD
 static unsigned int min_freq_hardlimit[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 static unsigned int max_freq_hardlimit[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -38,12 +37,10 @@ static unsigned int max_freq_hardlimit[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 #define CONFIG_MSM_CPU_FREQ_MAX_GROUP1 1555200
 #define CONFIG_MSM_CPU_FREQ_MIN_GROUP2 384000
 #define CONFIG_MSM_CPU_FREQ_MAX_GROUP2 1766400
-=======
 /* HACK: Prevent big cluster turned off when changing governor settings. */
 #ifdef CONFIG_MSM_HOTPLUG
 #include <linux/workqueue.h>
 #endif
->>>>>>> d813709... soc: qcom: msm_hotplug v2
 
 /**
  * The "cpufreq driver" - the arch- or hardware-dependent low
