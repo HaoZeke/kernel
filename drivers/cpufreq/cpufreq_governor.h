@@ -271,22 +271,6 @@ struct ac_dbs_tuners {
 	int pump_dec_step_at_min_freq;
 };
 
-struct ac_dbs_tuners {
-	unsigned int ignore_nice_load;
-	unsigned int sampling_rate;
-	int inc_cpu_load_at_min_freq;
-	int inc_cpu_load;
-	int dec_cpu_load_at_min_freq;
-	int dec_cpu_load;
-	int freq_responsiveness;
-	unsigned int cpus_up_rate;
-	unsigned int cpus_down_rate;
-	int pump_inc_step;
-	int pump_inc_step_at_min_freq;
-	int pump_dec_step;
-	int pump_dec_step_at_min_freq;
-};
-
 struct dk_dbs_tuners {
 	unsigned int ignore_nice_load;
 	unsigned int sampling_rate;
