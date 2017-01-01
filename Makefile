@@ -388,7 +388,8 @@ KBUILD_CFLAGS   := $(GRAPHITE) -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs 
 		   -fno-delete-null-pointer-checks \
 		   -ffast-math -fsingle-precision-constant \
 		   -fgcse-lm -fgcse-sm -fsched-spec-load -fforce-addr \
-		   -std=gnu89
+		   -std=gnu89    -march=armv8-a \
+		   -mtune=cortex-a53
 #		   -mcpu=cortex-a15 -mtune=cortex-a15 -mfpu=neon-vfpv4 -marm \
 #		   -std=gnu89
 #		   -fno-delete-null-pointer-checks \
