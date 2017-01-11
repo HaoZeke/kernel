@@ -322,7 +322,6 @@ config CPU_FREQ_GOV_CONSERVATIVE
 
 	  If in doubt, say N.
 
-<<<<<<< HEAD
 config CPU_FREQ_GOV_IMPULSE
 	tristate "'impulse' cpufreq policy governor"
 
