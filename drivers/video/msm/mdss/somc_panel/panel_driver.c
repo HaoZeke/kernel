@@ -32,7 +32,6 @@
 #include <linux/qpnp/pwm.h>
 #include <linux/err.h>
 #include <linux/regulator/consumer.h>
-#include <linux/display_state.h>
 
 #include "../mdss_mdp.h"
 #include "../mdss_dsi.h"
@@ -58,43 +57,6 @@ struct mdss_mdp_vsync_handler vs_handle;
 static int mdss_dsi_panel_pcc_setup(struct mdss_panel_data *pdata);
 static int mdss_dsi_panel_picadj_setup(struct mdss_panel_data *pdata);
 static void vsync_handler(struct mdss_mdp_ctl *ctl, ktime_t t);
-
-/* pcc data infomation */
-#define PANEL_SKIP_ID			0xff
-#define UNUSED				0xff
-#define CLR_DATA_REG_LEN_RENE_DEFAULT	2
-#define CLR_DATA_REG_LEN_NOVA_DEFAULT	1
-#define CLR_DATA_REG_LEN_NOVA_AUO	3
-#define CLR_DATA_REG_LEN_RENE_SR	1
-enum {
-	CLR_DATA_UV_PARAM_TYPE_NONE,
-	CLR_DATA_UV_PARAM_TYPE_RENE_DEFAULT,
-	CLR_DATA_UV_PARAM_TYPE_NOVA_DEFAULT,
-	CLR_DATA_UV_PARAM_TYPE_NOVA_AUO,
-	CLR_DATA_UV_PARAM_TYPE_RENE_SR
-};
-
-#define QPNP_REGULATOR_VSP_V_5P4V	5400000
-#define QPNP_REGULATOR_VSN_V_M5P4V	5400000
-
-bool is_display_on()
-{
-	return display_onoff_state;
-}
-
-static int __init lcdid_adc_setup(char *str)
-{
-	unsigned long res;
-
-	if (!*str)
-		return 0;
-	if (!kstrtoul(str, 0, &res)) {
-		lcdid_adc = res;
-	}
-
-	return 1;
-}
-__setup("lcdid_adc=", lcdid_adc_setup);
 
 static int __init continous_splash_setup(char *str)
 {
