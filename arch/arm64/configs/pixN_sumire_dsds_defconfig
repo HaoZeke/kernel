@@ -636,7 +636,7 @@ CONFIG_QMI_ENCDEC=y
 ###########################
 # Personal (Don't delete) #
 ###########################
-CONFIG_LOCALVERSION="-Dual_r3.1b1"
+CONFIG_LOCALVERSION="-Dual_r3.5"
 #CONFIG_SDCARD_FS=y
 
 CONFIG_CPU_FREQ_GOV_IMPULSE=y
@@ -764,3 +764,6 @@ CONFIG_ZEN_INTERACTIVE=y
 
 # CPUFREQ Limiter
 CONFIG_CPUFREQ_LIMITER=y
+
+# Enable workqueue power-efficient mode
+CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
